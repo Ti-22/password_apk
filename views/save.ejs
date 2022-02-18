@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <h1>Store Data</h1>
+    <a href="/">Home Page</a>
+    <a href="/save">Save Data</a>
+    <a href="/update">Update Data</a>
+    <a href="/read">Read Data</a>
+    <a href="/delete">Delete Data</a>
+    <div class="container">
+        <form id="SaveData">
+            <input type="text", id="username", autocomplete = "off", placeholder="username"/>
+            <br>
+            <input type="text", id="website", autocomplete = "off", placeholder="website Name"/>
+            <br>
+            <input type="password", id="password", placeholder="password"/>
+            <br>
+            <input type="text", id="email", autocomplete = "off", placeholder="email"/>
+            <br>
+            <input type="submit" value="Save"/>
+            <br>
+        </form>
+    </div>
+    <script>
+        const form = document.getElementById("SaveData")
+        form.addEventListener('submit', savedata)
+
+        async function savedata(event) {
+            event.preventDefault()
+            const username = document.getElementById('username').value
+            const website = document.getElementById('website').value
+            const password = document.getElementById('password').value
+            const email = document.getElementById('email').value
+            
+            const result = await fetch('/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    username,
+                    website,
+                    password,
+                    email
+                })
+            }).then((res) => res.json())
+
+            if(result.status ==='ok'){
+                alert('Data saved in Database!')
+            }
+            else{
+                alert(result.error);
+            }
+        }
+    </script>
+</body>
+</html>
