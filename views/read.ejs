@@ -27,9 +27,12 @@
         const form = document.getElementById("SaveData")
         form.addEventListener('submit', readdata)
 
+
         async function readdata(event) {
             event.preventDefault()
+            document.getElementById("userdata").innerHTML = ''
             const username = document.getElementById('username').value
+            console.log(username)
             const result = await fetch('/read', {
                 method: 'POST',
                 headers: {

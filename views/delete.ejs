@@ -14,32 +14,36 @@
     <a href="/read">Read Data</a>
     <a href="/delete">Delete Data</a>
     <div class="container">
-        <form id="SaveData">
+        <form id="RemoveData">
             <input type="text", id="username", autocomplete = "off", placeholder="username"/>
             <br>
-            <input type="text", id="website", autocomplete = "off", placeholder="website Name"/>
-            <br>
-            <input type="password", id="password", placeholder="password"/>
-            <br>
-            <input type="text", id="email", autocomplete = "off", placeholder="email"/>
-            <br>
-            <input type="submit" value="Save"/>
+            <input type="submit" value="Delete"/>
             <br>
         </form>
     </div>
     <script>
-        const form = document.getElementById("SaveData")
-        form.addEventListener('submit', savedata)
+        const form = document.getElementById("RemoveData")
+        form.addEventListener('submit', deleteData)
 
-        async function savedata(event) {
+        async function deleteData(event) {
             event.preventDefault()
             const username = document.getElementById('username').value
-            const website = document.getElementById('website').value
-            const password = document.getElementById('password').value
-            const email = document.getElementById('email').value
+            const result = await fetch('/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    username
+                })
+            }).then((res) => res.json())
 
-            alert(`username: ${username},website: ${website}, password:${password}, email:${email}`)
-
+            if(result.status === 'ok'){
+                alert('Data Deleted')
+            }
+            else{
+                alert(result.error);
+            }
         }
     </script>
 </body>
