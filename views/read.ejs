@@ -17,29 +17,37 @@
         <form id="SaveData">
             <input type="text", id="username", autocomplete = "off", placeholder="username"/>
             <br>
-            <input type="text", id="website", autocomplete = "off", placeholder="website Name"/>
+            <input type="submit" value="Read"/>
             <br>
-            <input type="password", id="password", placeholder="password"/>
-            <br>
-            <input type="text", id="email", autocomplete = "off", placeholder="email"/>
-            <br>
-            <input type="submit" value="Save"/>
-            <br>
+
         </form>
     </div>
+    <p id="userdata"></p>
     <script>
         const form = document.getElementById("SaveData")
-        form.addEventListener('submit', savedata)
+        form.addEventListener('submit', readdata)
 
-        async function savedata(event) {
+        async function readdata(event) {
             event.preventDefault()
             const username = document.getElementById('username').value
-            const website = document.getElementById('website').value
-            const password = document.getElementById('password').value
-            const email = document.getElementById('email').value
+            const result = await fetch('/read', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    username
+                })
+            }).then((res) => res.json())
 
-            alert(`username: ${username},website: ${website}, password:${password}, email:${email}`)
-
+            if(result.status === 'ok'){
+                alert('Data is in Database!')
+                console.log(result.data)
+                document.getElementById("userdata").innerHTML = `id: ${result.data._id},<br> User Name: ${result.data.username},<br> Password: ${result.data.password},<br> Email: ${result.data.email},<br> Website: ${result.data.website}`
+            }
+            else{
+                alert(result.error);
+            }
         }
     </script>
 </body>
