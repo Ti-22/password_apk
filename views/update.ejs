@@ -5,42 +5,61 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
+    
 </head>
 <body>
-    <h1>Update Data</h1>
+    <h1>Read Data</h1>
     <a href="/">Home Page</a>
     <a href="/save">Save Data</a>
     <a href="/update">Update Data</a>
     <a href="/read">Read Data</a>
     <a href="/delete">Delete Data</a>
     <div class="container">
-        <form id="SaveData">
+        <form id="FindData">
+            <h2>Enter username</h2>
             <input type="text", id="username", autocomplete = "off", placeholder="username"/>
             <br>
-            <input type="text", id="website", autocomplete = "off", placeholder="website Name"/>
-            <br>
+            <h2>Enter password to update</h2>
             <input type="password", id="password", placeholder="password"/>
             <br>
-            <input type="text", id="email", autocomplete = "off", placeholder="email"/>
+            <input type="submit" value="Read"/>
             <br>
-            <input type="submit" value="Save"/>
-            <br>
+
         </form>
     </div>
-    <script>
-        const form = document.getElementById("SaveData")
-        form.addEventListener('submit', savedata)
 
-        async function savedata(event) {
+    <script>
+    
+        const form1 = document.getElementById("FindData")
+        form1.addEventListener('submit', readdata)
+
+
+        async function readdata(event) {
             event.preventDefault()
             const username = document.getElementById('username').value
-            const website = document.getElementById('website').value
             const password = document.getElementById('password').value
-            const email = document.getElementById('email').value
+            // console.log(username, password)
+            const result = await fetch('/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    username,
+                    password
+                })
+            }).then((res) => res.json())
 
-            alert(`username: ${username},website: ${website}, password:${password}, email:${email}`)
-
+            if(result.status === 'ok'){
+                alert('Data is updated!')
+            }
+            else{
+                alert(result.error);
+            }
         }
     </script>
+      
+    </body>
+    </html>
 </body>
 </html>
